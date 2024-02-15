@@ -1,0 +1,697 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>팰 월드 데디케이티드 서버 구축(Palworld Dedicated server)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="bd80b50b-ff80-4fec-9061-54517706a61c" class="page sans"><header><h1 class="page-title">팰 월드 데디케이티드 서버 구축(Palworld Dedicated server)</h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-created_time"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>생성일</th><td><time>@2024년 1월 30일 오후 8:01</time></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>태그</th><td><span class="selected-value select-value-color-brown">서버</span><span class="selected-value select-value-color-green">스팀</span></td></tr></tbody></table></header><div class="page-body"><figure id="510a3716-24ae-4b1e-a938-bfffeea0c0f3" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled.jpeg"><img style="width:720px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled.jpeg"/></a></figure><ul id="1d57719c-e360-49ae-8e3e-609e606c57d1" class="toggle"><li><details open=""><summary>목차</summary><nav id="9d796b6b-7bf7-4a46-b12b-4b0fe321acd6" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#770af9b7-3838-4704-a2c4-893fa1a3dafa">서버 요구 사항</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5c89e008-77b4-41dc-b10d-9b113da1fdd3">방화벽 설정</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#221d4659-ce9a-44a5-b94b-a1797ba521aa">포트포워딩 설정</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ea684529-1807-499e-a0ac-b2b148e0f107">설치 진행</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#9e53ef20-bf5a-4c8b-8ed8-7ced937b4738">멀티쓰레딩 설정</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#0af05b1c-440d-400f-9595-0f6a344e99fc">마무리</a></div></nav></details></li></ul><h1 id="770af9b7-3838-4704-a2c4-893fa1a3dafa" class="">서버 요구 사항</h1><hr id="4482e864-1203-47d2-a496-071eba6f7c7f"/><ul id="7f3bf6c3-9ac4-40f2-8b4a-665a8dfaf9d6" class="bulleted-list"><li style="list-style-type:disc">CPU : 4 Core (권고)</li></ul><ul id="ccd70298-1115-4331-9c89-3a79ac2c1171" class="bulleted-list"><li style="list-style-type:disc">Memory :  16GB (최소) / 32GB(권고)</li></ul><p id="0bc3dc88-fbb7-4d54-8e55-399ebfe86a92" class="">
+</p><h1 id="5c89e008-77b4-41dc-b10d-9b113da1fdd3" class="">방화벽 설정</h1><hr id="9cfca59b-4d41-429e-b68a-0ba53f6efdef"/><blockquote id="f92475e9-120e-4dd5-b787-36c3fd2746ab" class=""><strong>방화벽 개방</strong></blockquote><figure id="ca5ccc34-9bc4-4992-8c45-d1b29ea263b2" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled.png"><img style="width:427px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled.png"/></a></figure><p id="f33e1e20-9c52-4daa-81e2-b7757142ee7f" class="">
+</p><ul id="694d537d-a9f2-4e2d-9cae-718dfba9fc6d" class="bulleted-list"><li style="list-style-type:disc">먼저 포트를 열어주기 위해 방화벽 설정</li></ul><p id="bca44714-f074-451d-a0fa-4bc78cbcfc78" class="">window 키 + S → ‘powerShell’ 검색 → 꼭 ‘<mark class="highlight-yellow">관리자 권한으로 실행</mark>’</p><p id="7966a2f7-ac68-49b2-9c8e-48524ff778a2" class="">
+</p><figure id="42b5fb78-1373-44dc-8ee6-d7534860dd32" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%201.png"><img style="width:976px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%201.png"/></a></figure><p id="6d220d25-fbc5-456e-8eb9-d0943ea50654" class="">
+</p><ul id="89981e91-f8f9-4817-9c10-ae006f993cfc" class="bulleted-list"><li style="list-style-type:disc">아래 명령어 2개를 순서대로 입력할 것</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b66e910d-a9a2-4cb4-a1aa-7165aa65bfe8" class="code"><code class="language-PowerShell">New-NetFirewallRule -DisplayName &quot;Palworld Server&quot; -Direction Inbound -LocalPort 27015,27016,25575 -Protocol TCP -Action Allow</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c7801d3a-e900-4846-81e8-b22bcd179bc1" class="code"><code class="language-PowerShell">New-NetFirewallRule -DisplayName &quot;Palworld Server&quot; -Direction Inbound -LocalPort 27015,27016,25575,8211 -Protocol UDP -Action Allow</code></pre><p id="7154d87d-79ec-4f29-b5b6-4ac6ee085412" class="">
+</p><figure id="bea000e1-f372-4813-a08a-fc766e0f5e3b" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%202.png"><img style="width:1063px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%202.png"/></a><figcaption>첫 번째 명령어 입력 시 결과</figcaption></figure><figure id="387cbf25-2cc8-4f5d-859c-15459d8a5f3c" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%203.png"><img style="width:1100px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%203.png"/></a><figcaption>두 번째 명령어 입력 시 결과</figcaption></figure><p id="96a98b5a-b6c0-4a3a-acf6-b2951424ed9a" class="">
+</p><ul id="6b763f72-b27d-464a-b14a-6e1ed8d957f7" class="bulleted-list"><li style="list-style-type:disc"> 방화벽 상태 확인</li></ul><p id="902b6c55-39b2-48cb-8ee6-28922c83a4fe" class="">window 키 + S → ‘<mark class="highlight-yellow"><strong>방화벽 상태 확인</strong></mark>’ 검색 → 고급 설정 → 인바운드 규칙</p><div id="7fdd6166-68c4-48c8-b8d6-7d47fd9879f5" class="column-list"><div id="1305ee9a-e42b-4194-8cd2-79d139a453da" style="width:50%" class="column"><figure id="21cff03a-b955-48e6-82eb-d38eaee06867" class="image" style="text-align:center"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%204.png"><img style="width:216px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%204.png"/></a></figure></div><div id="4a0d3ec3-5036-4dca-8e2a-b7f566ce4d2c" style="width:50%" class="column"><figure id="92574fbc-00f8-49d3-8f68-d17f684dbd6b" class="image" style="text-align:center"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%205.png"><img style="width:189px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%205.png"/></a></figure></div></div><p id="27d18cb0-374e-4943-98a3-f8468042ba31" class="">
+</p><figure id="89b2edbd-6985-4c4a-b6d3-efb24768a069" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%206.png"><img style="width:904px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%206.png"/></a><figcaption>인바운드 규칙에 위와 같이 추가가 되어 있으면 확인 완료</figcaption></figure><p id="18b720fb-4a9d-4e5b-b65d-cbb36cdeea33" class="">
+</p><h1 id="221d4659-ce9a-44a5-b94b-a1797ba521aa" class="">포트포워딩 설정</h1><hr id="0a3a7b1d-f9db-439a-bb48-f7e61656a2b1"/><blockquote id="e4d338a4-d421-4b67-9ac1-cb1264b2a625" class=""><strong>포트 포워딩 하는 법</strong></blockquote><ul id="00c6ccfa-18d1-41ac-93ba-a2de6acfc507" class="bulleted-list"><li style="list-style-type:disc">iP와 게이트웨이 확인</li></ul><figure id="8d9ed5a8-d672-4355-9229-7679e69a3816" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%207.png"><img style="width:976px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%207.png"/></a><figcaption>이 부분에서 IP주소와 기본 게이트웨이 주소를 확인 (무선LAN 어댑터 Wi-Fi 명칭이 안 뜨는 경우도 있음)</figcaption></figure><p id="9e24a0d5-6943-40a4-b765-9c1b6f89295f" class="">게이트웨이 주소를 인터넷 주소 입력하는 곳에 입력하면 자신이 사용하고 있는 공유기로 접속이 가능하다.</p><p id="d32c657e-3d1f-4602-a99c-39e07aac42c1" class="">
+</p><ul id="9d8c31a8-3b27-4093-8a24-fc01571a4c64" class="bulleted-list"><li style="list-style-type:disc">공유기 설정 확인</li></ul><figure id="79c2629c-7b65-436c-9e0f-f8ffa010f449" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%208.png"><img style="width:882px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%86%B7%20CMD%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworl%20303428016ca547ef80b5304822bba924/Untitled%208.png"/></a><figcaption>(* IPTIME 기준) 게이트웨이 주소로 공유기 설정에 접속 시 순서대로 따라하면 됨</figcaption></figure><ol type="1" id="0d42b646-3dcb-45f9-8c6c-5ef5345b7bd2" class="numbered-list" start="1"><li>포트포워드 설정 클릭</li></ol><ol type="1" id="b10112c0-8c8e-4e56-867b-cd1329f2878e" class="numbered-list" start="2"><li>내부 IP주소 할당, 프로토콜 설정, 외부 포트 설정, 내부 포트 설정 후 적용</li></ol><ol type="1" id="35452a55-e547-4e16-b1e2-21790fba6455" class="numbered-list" start="3"><li>3번처럼 올바르게 적용이 되었는지 확인하면 끝</li></ol><p id="e643d247-9dd5-4a99-93dc-b0eca52ada38" class="">
+</p><h1 id="ea684529-1807-499e-a0ac-b2b148e0f107" class="">설치 진행</h1><hr id="dec995d7-8084-455d-b03c-1beba7f7a4c5"/><blockquote id="ffe12e9d-4fd4-40d7-8970-f6eacd65a09b" class=""><strong>서버 구동기 설치</strong></blockquote><figure id="89b239a6-0dfb-4798-9170-6612564a22ff" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled.png"><img style="width:1274px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled.png"/></a></figure><ul id="7685d0ee-443f-4ce6-aebe-73f8ad8f8e61" class="bulleted-list"><li style="list-style-type:disc">Dedicated Server 구동기 설치</li></ul><ol type="1" id="ce008de2-3504-4946-9e86-f408b71c626f" class="numbered-list" start="1"><li>라이브러리 검색 창에 Dedicated Server를 찾은 후 설치</li></ol><p id="83573690-1013-4a44-85f2-0b933e83ecad" class="">
+</p><figure id="28306ae3-c9f3-4876-bc56-c5745e60e8e2" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%201.png"><img style="width:593px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%201.png"/></a></figure><ol type="1" id="a7b88288-1e37-472c-acd6-702ee546f6f6" class="numbered-list" start="2"><li>설치 후 실행(옵션은 무엇으로 하든 상관 없음)</li></ol><p id="a96c8e12-4e14-48a9-b76e-786527f17f0a" class="">
+</p><figure id="dacfef1a-759d-46a0-a92c-3d1045d5270f" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%202.png"><img style="width:855px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%202.png"/></a><figcaption>아무것도 뜨지 않는 것도 정상적이니 신경 쓰지 말 것</figcaption></figure><ol type="1" id="7b694d55-88ff-47de-832e-5c85b645c2ca" class="numbered-list" start="3"><li>콘솔 창이 열리고 파일을 생성 중이니 5초 정도 후에 창을 닫을 것.</li></ol><p id="3984d772-95f0-44ec-90e0-0b24d2f32c33" class="">
+</p><ul id="5c8f338e-13e9-49fd-b3b4-404924e9aa07" class="bulleted-list"><li style="list-style-type:disc">서버 파일 상세 설정</li></ul><figure id="c2e1d05b-5593-4578-8d58-3b0b270fd52e" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%203.png"><img style="width:1417px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%203.png"/></a></figure><ol type="1" id="aee089f6-9bd0-4578-bdaf-ecc7576979b1" class="numbered-list" start="1"><li>Dedicated Server의 로컬 파일 열기</li></ol><p id="54818729-6ba3-4844-9f20-d819bc337172" class="">
+</p><figure id="b9cefa9f-e38f-4348-a9c8-d9b44d592263" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%204.png"><img style="width:981px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%204.png"/></a><figcaption>Dedicated Server의 로컬 파일이 열리자마자 보임</figcaption></figure><ol type="1" id="16a13614-6fc5-497c-a7b7-70ce92d22172" class="numbered-list" start="2"><li>DefaultPalWorldSetting.ini 파일을 우클릭 하여 편집</li></ol><p id="6e5e092c-711d-4074-a7a1-aa5252363264" class="">
+</p><figure id="e03ec4ee-90ba-42e2-bebd-4968f9f1c5e7" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%205.png"><img style="width:1167px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%205.png"/></a></figure><ol type="1" id="b34c77e3-115b-43ea-986d-ef30ab58a983" class="numbered-list" start="3"><li>드래그 한 범위 시작부터 끝까지 복사</li></ol><p id="ba0f6fe7-f4f1-4410-8076-df53ddaa3927" class="">
+</p><figure id="01fee3cd-80f6-4524-ae88-38ce7950f1a9" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%206.png"><img style="width:979px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%206.png"/></a><figcaption>파일 경로 : Pal 폴더 → Saved 폴더 → Config 폴더 → WindowsServer 폴더</figcaption></figure><ol type="1" id="f4468fbf-c683-4dd6-8399-83a4ad85482c" class="numbered-list" start="4"><li>PalWorldSettings.ini 파일을 똑같이 우클릭 후 편집으로 열기</li></ol><p id="38496298-4d10-4fcd-a181-a09202be5a2f" class="">
+</p><figure id="964fa755-661d-49ec-9b3c-3675f44500ed" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%207.png"><img style="width:1169px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%207.png"/></a><figcaption>서버 이름 등등 이제 세부적인 설정은 이 파일에서 수정을 해야함</figcaption></figure><ol type="1" id="75b02ba6-155f-4bb1-b174-a566b5ea3256" class="numbered-list" start="5"><li>파일을 열면 아무것도 없는 것이 정상, 거기에 복사한 내용을 붙여 넣으면 끝</li></ol><h1 id="9e53ef20-bf5a-4c8b-8ed8-7ced937b4738" class="">멀티쓰레딩 설정</h1><hr id="6856fce1-a5a7-432e-ad37-580d56c4356b"/><blockquote id="1f326e5e-5888-4389-bdd9-733f04215d95" class=""><strong>멀티쓰레딩 옵션 추가</strong></blockquote><figure id="c89faff8-61d7-499d-b146-cc541f503bf7" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%208.png"><img style="width:1416px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%208.png"/></a></figure><ol type="1" id="984b54aa-fe95-42f3-b311-12301ca47b29" class="numbered-list" start="1"><li>스팀 라이브러리에서 Dedicated Server의 속성 클릭</li></ol><p id="1163fdd3-b135-4227-806b-c47c96641c65" class="">
+</p><figure id="32628174-9cfe-46d2-a0a2-7e316d4511a3" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%209.png"><img style="width:832px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%209.png"/></a></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0c1f457a-d7ae-4f3f-bbfa-01ff44c304f4" class="code"><code class="language-C">-useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS</code></pre><ol type="1" id="8f35e58d-6085-46b4-9b82-b29bf7716844" class="numbered-list" start="2"><li>표시된 부분에 명령어 복사 후 속성에 입력한 뒤에 따로 저장 할 필요 없이 속성 창 종료하면 설정 완료</li></ol><p id="b46038a1-b0a8-4d20-aefe-6ae17b940cc7" class="">
+</p><h1 id="0af05b1c-440d-400f-9595-0f6a344e99fc" class="">마무리</h1><hr id="7035c32a-1325-43db-bab4-92414b1f4be7"/><blockquote id="48e1fa80-2cf2-4a4a-bc18-e5334c03f6e2" class="">게임 실행 후 확인</blockquote><figure id="2e4ec093-03d5-42d8-bbbe-732ebdf48e25" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%2010.png"><img style="width:889px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%2010.png"/></a></figure><ol type="1" id="61663659-ded2-4f22-a8f8-72b52b5ccad9" class="numbered-list" start="1"><li>게임을 실행한 후에 ‘멀티 플레이 참가하기(전용서버)’를 선택한다.</li></ol><p id="5e8efb4a-4a26-4412-9e9f-2191124d0f19" class="">
+</p><figure id="26fe13a5-297c-449d-a4ff-bacdddfe2141" class="image"><a href="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%2011.png"><img style="width:1503px" src="%E1%84%91%E1%85%A2%E1%86%AF%20%E1%84%8B%E1%85%AF%E1%86%AF%E1%84%83%E1%85%B3%20%E1%84%83%E1%85%A6%E1%84%83%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%90%E1%85%B5%E1%84%83%E1%85%B3%20%E1%84%89%E1%85%A5%E1%84%87%E1%85%A5%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%E1%86%A8(Palworld%20Dedicat%20bd80b50bff804fec906154517706a61c/Untitled%2011.png"/></a></figure><ol type="1" id="1cd7c1a0-cf9d-4d89-a0c9-3099d93cba81" class="numbered-list" start="2"><li>표시된 부분처럼 서버를 만든 사람(호스트)의 아이피를 입력 후 접속<br/>(ex. 0.0.0.0:8211, :8211 까지 꼭 붙여 주도록 하자)<br/></li></ol><p id="09912164-4337-4859-ab08-c1de1d57b2ca" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
